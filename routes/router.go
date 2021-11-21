@@ -1,23 +1,14 @@
 package routes
 
 import (
+	"GoBIMS/controllers"
 	"GoBIMS/utils"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() {
+func InitRouter() *gin.Engine {
 	gin.SetMode(utils.AppMode)
-	r := gin.Default()
-
-	router := r.Group("api/v1")
-	{
-		router.GET("Hello", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "ok",
-			})
-		})
-	}
-	r.Run(utils.HttpPort)
+	router := gin.Default()
+	router.POST("/api/v1/book", controllers.GetBookByID)
+	return router
 }
