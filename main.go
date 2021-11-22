@@ -1,13 +1,9 @@
 package main
 
 import (
-	"GoBIMS/routes"
+	"GoBIMS/model"
 )
 
 func main() {
-	router := routes.InitRouter()
-	err := router.Run(":3000")
-	if err != nil {
-		panic(err)
-	}
+	model.InitDB()
 }

@@ -1,7 +1,10 @@
 package model
 
-type Book struct {
-	ID int
-	Name string
-	Author string
+type BookInfo struct {
+	id         int
+	name       string
+	categories string
+	author     string
+	price      float32
+	date       string
 }
