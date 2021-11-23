@@ -17,7 +17,7 @@ var db *gorm.DB
 var err error
 
 func InitDB() {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		utils.DbUser, utils.DbPassword, utils.DbHost, utils.DbPort, utils.DbName)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// gorm日志模式：silent
