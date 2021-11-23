@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"GoBIMS/model"
+	"GoBIMS/utils/errmsg"
 	"fmt"
 	"net/http"
 
@@ -16,14 +18,24 @@ func Login(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("username:%s , password:%s , types:%s", username, password, types))
 }
 
-// 查询用户是否存在
-func IsUserExist(c *gin.Context) {
-	//
-}
-
 // 添加用户
 func AddUser(c *gin.Context) {
-	//
+	var user model.User
+	var validCode int
+	_ = c.ShouldBindJSON(&user)
+	validCode = model.CheckUser(user.UserName)
+	// msg, validCode := validator.Validate(&user)
+	if validCode == errmsg.SUCCSE {
+		model.CreatUser(&user)
+	}
+	if validCode == errmsg.ERROR_USERNAME_USED {
+		validCode = errmsg.ERROR_USERNAME_USED
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  validCode,
+		"user":    user,
+		"message": errmsg.GetErrMsg(validCode),
+	})
 }
 
 // 查询用户
