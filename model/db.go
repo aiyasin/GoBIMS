@@ -44,7 +44,7 @@ func InitDB() {
 	// SetMaxOpenCons 设置数据库的最大连接数量。
 	sqlDB.SetMaxOpenConns(100)
 
-	// SetConnMaxLifetiment 设置连接的最大可复用时间。
+	// SetConnMaxLifetime 设置连接的最大可复用时间。
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
 
 }
