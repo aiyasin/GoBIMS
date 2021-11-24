@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-// 用户登录
+// Login 用户登录
 func Login(c *gin.Context) {
 	types := c.DefaultPostForm("type", "post")
 	username := c.PostForm("username")
@@ -20,13 +20,13 @@ func Login(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("username:%s , password:%s , types:%s", username, password, types))
 }
 
-// 用户注册
+// JoinUp 用户注册
 func JoinUp(c *gin.Context) {
 	var user model.User
 	var code int
 	_ = c.ShouldBindJSON(&user)
 	code = model.CheckUser(user)
-	if code == errmsg.SUCCSE {
+	if code == errmsg.SUCCESS {
 		if len(user.UserName) == 0 {
 			user.UserName = utils.RandString(10)
 		}
@@ -37,7 +37,7 @@ func JoinUp(c *gin.Context) {
 	}
 }
 
-// 查询用户
+// GetUser 查询用户列表
 func GetUser(c *gin.Context) {
 	pageSize := cast.ToInt(c.Query("pagesize"))
 	pageNum := cast.ToInt(c.Query("pagenum"))
@@ -52,18 +52,18 @@ func GetUser(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = 1
 	}
-	data, total := model.CheckUserPage(username, pageSize, pageNum)
-	code := errmsg.SUCCSE
-	pagenumtotal := fmt.Sprintf("第%d页/共%d个用户", pageNum, total)
+	data, totalnum := model.CheckUserPage(username, pageSize, pageNum)
+	code := errmsg.SUCCESS
+	pagenumtotal := fmt.Sprintf("第%d页|共%d页", pageNum, totalnum)
 	utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
 }
 
-// 编辑用户
+// EditUser 编辑用户
 func EditUser(c *gin.Context) {
 	//
 }
 
-// 删除用户
+// DeleteUser 删除用户
 func DeleteUser(c *gin.Context) {
 	//
 }
