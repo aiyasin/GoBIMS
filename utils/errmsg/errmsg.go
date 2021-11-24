@@ -1,33 +1,33 @@
 package errmsg
 
 const (
-	SUCCSE = 200
-	ERROR  = 500
+	SUCCESS = 200
+	ERROR   = 500
 
 	// code= 1000... 用户模块的错误
-	ERROR_USERNAME_USED       = 1001
-	ERROR_PASSWORD_WRONG      = 1002
-	ERROR_USER_NOT_EXIST      = 1003
-	ERROR_TOKEN_EXIST         = 1004
-	ERROR_TOKEN_RUNTIME       = 1005
-	ERROR_TOKEN_WRONG         = 1006
-	ERROR_TOKEN_TYPE_WRONG    = 1007
-	ERROR_USER_NO_RIGHT       = 1008
-	ERROR_PASSWORD_LESS_THAN6 = 1009
+	ErrorUsernameUsed      = 1001
+	ErrorPasswordWrong     = 1002
+	ErrorUserNotExist      = 1003
+	ErrorTokenExist        = 1004
+	ErrorTokenRuntime      = 1005
+	ErrorTokenWrong        = 1006
+	ErrorTokenTypeWrong    = 1007
+	ErrorUserNoRight       = 1008
+	ErrorPasswordLessThan6 = 1009
 )
 
 var codeMsg = map[int]string{
-	SUCCSE:                    "OK",
-	ERROR:                     "FAIL",
-	ERROR_USERNAME_USED:       "用户名已存在！",
-	ERROR_PASSWORD_WRONG:      "密码错误",
-	ERROR_USER_NOT_EXIST:      "用户不存在",
-	ERROR_TOKEN_EXIST:         "TOKEN不存在,请重新登陆",
-	ERROR_TOKEN_RUNTIME:       "TOKEN已过期,请重新登陆",
-	ERROR_TOKEN_WRONG:         "TOKEN不正确,请重新登陆",
-	ERROR_TOKEN_TYPE_WRONG:    "TOKEN格式错误,请重新登陆",
-	ERROR_USER_NO_RIGHT:       "该用户无权限",
-	ERROR_PASSWORD_LESS_THAN6: "密码长度小于6",
+	SUCCESS:                "OK",
+	ERROR:                  "FAIL",
+	ErrorUsernameUsed:      "用户名已存在！",
+	ErrorPasswordWrong:     "密码错误",
+	ErrorUserNotExist:      "用户不存在",
+	ErrorTokenExist:        "TOKEN不存在,请重新登陆",
+	ErrorTokenRuntime:      "TOKEN已过期,请重新登陆",
+	ErrorTokenWrong:        "TOKEN不正确,请重新登陆",
+	ErrorTokenTypeWrong:    "TOKEN格式错误,请重新登陆",
+	ErrorUserNoRight:       "该用户无权限",
+	ErrorPasswordLessThan6: "密码长度小于6",
 }
 
 func GetErrMsg(code int) string {
