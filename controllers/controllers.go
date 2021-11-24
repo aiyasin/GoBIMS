@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 )
 
 // 用户登录
@@ -30,17 +31,31 @@ func JoinUp(c *gin.Context) {
 			user.UserName = utils.RandString(10)
 		}
 		model.CreatUser(&user)
+		utils.ReturnJSON(c, http.StatusOK, code, user)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code)
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"message": errmsg.GetErrMsg(code),
-		"user":    user,
-	})
 }
 
 // 查询用户
 func GetUser(c *gin.Context) {
-	//
+	pageSize := cast.ToInt(c.Query("pagesize"))
+	pageNum := cast.ToInt(c.Query("pagenum"))
+	username := c.Query("user_name")
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+	data, total := model.CheckUserPage(username, pageSize, pageNum)
+	code := errmsg.SUCCSE
+	pagenumtotal := fmt.Sprintf("第%d页/共%d个用户", pageNum, total)
+	utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
 }
 
 // 编辑用户

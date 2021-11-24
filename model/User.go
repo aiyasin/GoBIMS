@@ -33,3 +33,25 @@ func CreatUser(user *User) (code int) {
 	}
 	return errmsg.SUCCSE //200
 }
+
+// 查询用户列表
+func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
+	var user []User
+	var total int64
+	if username != "" {
+		db.Select("id,user_name,role,created_at").Where(
+			"user_name LIKE ?", username+"%",
+		).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
+		db.Model(&user).Where(
+			"user_name LIKE ?", username+"%",
+		).Count(&total)
+		return user, total
+	}
+	db.Select("id,user_name,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
+	db.Model(&user).Count(&total)
+
+	if err != nil {
+		return user, 0
+	}
+	return user, total
+}
