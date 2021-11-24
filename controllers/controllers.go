@@ -18,23 +18,19 @@ func Login(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("username:%s , password:%s , types:%s", username, password, types))
 }
 
-// 添加用户
-func AddUser(c *gin.Context) {
+// 用户注册
+func JoinUp(c *gin.Context) {
 	var user model.User
-	var validCode int
+	var code int
 	_ = c.ShouldBindJSON(&user)
-	validCode = model.CheckUser(user.UserName)
-	// msg, validCode := validator.Validate(&user)
-	if validCode == errmsg.SUCCSE {
+	code = model.CheckUser(user.UserName)
+	if code == errmsg.SUCCSE {
 		model.CreatUser(&user)
 	}
-	if validCode == errmsg.ERROR_USERNAME_USED {
-		validCode = errmsg.ERROR_USERNAME_USED
-	}
 	c.JSON(http.StatusOK, gin.H{
-		"status":  validCode,
+		"status":  code,
 		"user":    user,
-		"message": errmsg.GetErrMsg(validCode),
+		"message": errmsg.GetErrMsg(code),
 	})
 }
 
