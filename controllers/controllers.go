@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GoBIMS/model"
+	"GoBIMS/utils"
 	"GoBIMS/utils/errmsg"
 	"fmt"
 	"net/http"
@@ -23,14 +24,17 @@ func JoinUp(c *gin.Context) {
 	var user model.User
 	var code int
 	_ = c.ShouldBindJSON(&user)
-	code = model.CheckUser(user.UserName)
+	code = model.CheckUser(user)
 	if code == errmsg.SUCCSE {
+		if len(user.UserName) == 0 {
+			user.UserName = utils.RandString(10)
+		}
 		model.CreatUser(&user)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
-		"user":    user,
 		"message": errmsg.GetErrMsg(code),
+		"user":    user,
 	})
 }
 

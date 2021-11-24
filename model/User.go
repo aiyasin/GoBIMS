@@ -14,9 +14,11 @@ type User struct {
 }
 
 // 查询用户是否存在
-func CheckUser(name string) (code int) {
-	var user User
-	db.Select("id").Where("user_name = ?", name).First(&user)
+func CheckUser(user User) (code int) {
+	db.Select("id").Where("user_name = ?", user.UserName).First(&user)
+	if len(user.PassWord) < 6 {
+		return errmsg.ERROR_PASSWORD_LESS_THAN6
+	}
 	if user.ID > 0 {
 		return errmsg.ERROR_USERNAME_USED //1001
 	}
