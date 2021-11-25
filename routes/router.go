@@ -13,9 +13,9 @@ func InitRouter() *gin.Engine {
 	// 用户模块路由接口
 	router.POST("login/", controllers.Login)
 	router.POST("user/joinup", controllers.JoinUp)
-	router.GET("users/", controllers.GetUser)
-	// router.PUT("user/", controllers.EditUser)
-	// router.DELETE("user/:id", controllers.DeleteUser)
+	router.GET("user/", controllers.GetUser)
+	router.PUT("user/:id", controllers.EditUser)
+	router.DELETE("user/:id", controllers.DeleteUser)
 
 	return router
 }

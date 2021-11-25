@@ -86,3 +86,39 @@ func ScryptPassWord(password string) string {
 	}
 	return string(HashPassWord)
 }
+
+// EditUser 编辑用户信息
+func EditUser(id int, data *User) int {
+	var user User
+	var maps = make(map[string]interface{})
+	maps["username"] = data.UserName
+	maps["role"] = data.Role
+	err = db.Model(&user).Where("id = ? ", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
+
+// DeleteUser 删除用户
+func DeleteUser(id int) int {
+	var user User
+	err = db.Where("id = ? ", id).Delete(&user).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
+
+// CheckUpUser 更新查询
+func CheckUpUser(id int, name string) (code int) {
+	var user User
+	db.Select("id, username").Where("username = ?", name).First(&user)
+	if user.ID == uint(id) {
+		return errmsg.SUCCESS
+	}
+	if user.ID > 0 {
+		return errmsg.ErrorUsernameUsed //1001
+	}
+	return errmsg.SUCCESS
+}
