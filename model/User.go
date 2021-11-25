@@ -1,6 +1,7 @@
 package model
 
 import (
+	"GoBIMS/utils"
 	"GoBIMS/utils/errmsg"
 	"log"
 	"math"
@@ -19,6 +20,9 @@ type User struct {
 // CheckUser 查询用户是否存在
 func CheckUser(user User) (code int) {
 	db.Select("id").Where("user_name = ?", user.UserName).First(&user)
+	if len(user.UserName) == 0 {
+		user.UserName = utils.RandString(10)
+	}
 	if len(user.PassWord) < 6 {
 		return errmsg.ErrorPasswordLessThan6
 	}
@@ -64,7 +68,7 @@ func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
 // BeforeCreate 密码加密&权限控制
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	u.PassWord = ScryptPassWord(u.PassWord)
-	u.Role = 2
+	// u.Role = 2
 	return nil
 }
 

@@ -27,9 +27,6 @@ func JoinUp(c *gin.Context) {
 	_ = c.ShouldBindJSON(&user)
 	code = model.CheckUser(user)
 	if code == errmsg.SUCCESS {
-		if len(user.UserName) == 0 {
-			user.UserName = utils.RandString(10)
-		}
 		model.CreatUser(&user)
 		utils.ReturnJSON(c, http.StatusOK, code, user)
 	} else {
