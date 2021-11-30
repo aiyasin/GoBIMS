@@ -12,7 +12,7 @@ func ReturnJSON(c *gin.Context, httpStatus int, code int, data ...interface{}) {
 	c.JSON(httpStatus, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),
-		"user":    data,
+		"data":    data,
 	})
 
 }

@@ -18,7 +18,11 @@ var err error
 
 func InitDB() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		utils.DbUser, utils.DbPassword, utils.DbHost, utils.DbPort, utils.DbName)
+		utils.DbUser,
+		utils.DbPassword,
+		utils.DbHost,
+		utils.DbPort,
+		utils.DbName)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// gorm日志模式：silent
 		Logger: logger.Default.LogMode(logger.Silent),
@@ -36,7 +40,8 @@ func InitDB() {
 		os.Exit(1)
 	}
 	// 迁移数据表，在没有数据表结构变更时候，建议注释不执行
-	_ = db.AutoMigrate(&User{})
+	_ = db.AutoMigrate(&User{}, &Book{})
+
 	sqlDB, _ := db.DB()
 	// SetMaxIdleCons 设置连接池中的最大闲置连接数。
 	sqlDB.SetMaxIdleConns(10)

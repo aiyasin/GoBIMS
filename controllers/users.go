@@ -50,14 +50,19 @@ func GetUser(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = 1
 	}
-	data, totalnum := model.CheckUserPage(username, pageSize, pageNum)
+	data, total := model.CheckUserPage(username, pageSize, pageNum)
 	code := errmsg.SUCCESS
-	pagenumtotal := fmt.Sprintf("第%d页|共%d页", pageNum, totalnum)
-	utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
+	// pagenumtotal := fmt.Sprintf("第%d页|共%d页", pageNum, totalnum)
+	// utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
+	c.JSON(http.StatusOK, gin.H{
+		"status":   code,
+		"message":  errmsg.GetErrMsg(code),
+		"data":     data,
+		"totalnum": total,
+	})
 }
 
 // EditUser 编辑用户
-
 func EditUser(c *gin.Context) {
 	var data model.User
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -75,25 +80,4 @@ func DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	code := model.DeleteUser(id)
 	utils.ReturnJSON(c, http.StatusOK, code)
-}
-
-// GetBook 查询图书列表
-func GetBook(c *gin.Context) {
-	pageSize := cast.ToInt(c.Query("pagesize"))
-	pageNum := cast.ToInt(c.Query("pagenum"))
-	username := c.Query("user_name")
-	switch {
-	case pageSize >= 100:
-		pageSize = 100
-	case pageSize <= 0:
-		pageSize = 10
-	}
-
-	if pageNum == 0 {
-		pageNum = 1
-	}
-	data, totalnum := model.CheckUserPage(username, pageSize, pageNum)
-	code := errmsg.SUCCESS
-	pagenumtotal := fmt.Sprintf("第%d页|共%d页", pageNum, totalnum)
-	utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
 }

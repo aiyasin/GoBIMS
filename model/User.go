@@ -4,7 +4,6 @@ import (
 	"GoBIMS/utils"
 	"GoBIMS/utils/errmsg"
 	"log"
-	"math"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -46,14 +45,15 @@ func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
 	var user []User
 	var total int64
 	if username != "" {
-		db.Select("id,user_name,role,created_at").Where(
-			"user_name LIKE ?", username+"%",
-		).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
+		db.Select("id,user_name,role,created_at").
+			Where("user_name LIKE ?", username+"%").
+			Limit(pageSize).
+			Offset((pageNum - 1) * pageSize).
+			Find(&user)
 		db.Model(&user).Where(
 			"user_name LIKE ?", username+"%",
 		).Count(&total)
-		totalnum := int64(math.Ceil(float64(total) / float64(pageSize)))
-		return user, totalnum
+		return user, total
 	}
 	db.Select("id,user_name,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
 	db.Model(&user).Count(&total)
@@ -61,8 +61,7 @@ func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
 	if err != nil {
 		return user, 0
 	}
-	totalnum := int64(math.Ceil(float64(total) / float64(pageSize)))
-	return user, totalnum
+	return user, total
 }
 
 // BeforeCreate 密码加密&权限控制
