@@ -4,22 +4,12 @@ import (
 	"GoBIMS/model"
 	"GoBIMS/utils"
 	"GoBIMS/utils/errmsg"
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 )
-
-// Login 用户登录
-func Login(c *gin.Context) {
-	types := c.DefaultPostForm("type", "post")
-	username := c.PostForm("username")
-	password := c.PostForm("userpassword")
-
-	c.String(http.StatusOK, fmt.Sprintf("username:%s , password:%s , types:%s", username, password, types))
-}
 
 // JoinUp 用户注册
 func JoinUp(c *gin.Context) {
@@ -29,9 +19,9 @@ func JoinUp(c *gin.Context) {
 	code = model.CheckUser(user)
 	if code == errmsg.SUCCESS {
 		model.CreatUser(&user)
-		utils.ReturnJSON(c, http.StatusOK, code, user)
+		utils.ReturnJSON(c, http.StatusOK, code, -1, user)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
 	}
 }
 
@@ -50,16 +40,12 @@ func GetUser(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = 1
 	}
-	data, total := model.CheckUserPage(username, pageSize, pageNum)
-	code := errmsg.SUCCESS
-	// pagenumtotal := fmt.Sprintf("第%d页|共%d页", pageNum, totalnum)
-	// utils.ReturnJSON(c, http.StatusOK, code, data, pagenumtotal)
-	c.JSON(http.StatusOK, gin.H{
-		"status":   code,
-		"message":  errmsg.GetErrMsg(code),
-		"data":     data,
-		"totalnum": total,
-	})
+	data, code, total := model.CheckUserPage(username, pageSize, pageNum)
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, total, data)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
 
 // EditUser 编辑用户
@@ -71,13 +57,19 @@ func EditUser(c *gin.Context) {
 	code := model.CheckUpUser(id, data.UserName)
 	if code == errmsg.SUCCESS {
 		model.EditUser(id, &data)
+		utils.ReturnJSON(c, http.StatusOK, code, -1)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
 	}
-	utils.ReturnJSON(c, http.StatusOK, code)
 }
 
 // DeleteUser 删除用户
 func DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	code := model.DeleteUser(id)
-	utils.ReturnJSON(c, http.StatusOK, code)
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, -1)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }

@@ -18,11 +18,11 @@ var err error
 
 func InitDB() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		utils.DbUser,
-		utils.DbPassword,
-		utils.DbHost,
-		utils.DbPort,
-		utils.DbName)
+		utils.DBUser,
+		utils.DBPassword,
+		utils.DBHost,
+		utils.DBPort,
+		utils.DBName)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// gorm日志模式：silent
 		Logger: logger.Default.LogMode(logger.Silent),

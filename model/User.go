@@ -16,6 +16,44 @@ type User struct {
 	Role     int    `gorm:"type:int;default:2;columns:role" json:"role" validate:"required" label:"角色码"`
 }
 
+// CheckLogin 后台登录验证
+func CheckLogin(username string, password string) (User, int) {
+	var user User
+	var PasswordErr error
+
+	db.Where("username = ?", username).First(&user)
+
+	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(password))
+
+	if user.ID == 0 {
+		return user, errmsg.ErrorUserNotExist
+	}
+	if PasswordErr != nil {
+		return user, errmsg.ErrorPasswordWrong
+	}
+	if user.Role != 1 {
+		return user, errmsg.ErrorUserNoRight
+	}
+	return user, errmsg.SUCCESS
+}
+
+// CheckLoginFront 前台登录
+func CheckLoginFront(username string, password string) (User, int) {
+	var user User
+	var PasswordErr error
+
+	db.Where("username = ?", username).First(&user)
+
+	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(password))
+	if user.ID == 0 {
+		return user, errmsg.ErrorUserNotExist
+	}
+	if PasswordErr != nil {
+		return user, errmsg.ErrorPasswordWrong
+	}
+	return user, errmsg.SUCCESS
+}
+
 // CheckUser 查询用户是否存在
 func CheckUser(user User) (code int) {
 	db.Select("id").Where("user_name = ?", user.UserName).First(&user)
@@ -41,7 +79,7 @@ func CreatUser(user *User) (code int) {
 }
 
 // CheckUserPage 查询用户列表
-func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
+func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int, int64) {
 	var user []User
 	var total int64
 	if username != "" {
@@ -53,15 +91,15 @@ func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int64) {
 		db.Model(&user).Where(
 			"user_name LIKE ?", username+"%",
 		).Count(&total)
-		return user, total
+		return user, errmsg.SUCCESS, total
 	}
 	db.Select("id,user_name,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
 	db.Model(&user).Count(&total)
 
 	if err != nil {
-		return user, 0
+		return user, errmsg.ERROR, 0
 	}
-	return user, total
+	return user, errmsg.SUCCESS, total
 }
 
 // BeforeCreate 密码加密&权限控制

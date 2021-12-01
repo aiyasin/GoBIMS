@@ -38,7 +38,7 @@ func InitRouter() *gin.Engine {
 	// 基础模块路由接口
 	base := r.Group("api/v1/base")
 	{
-		base.POST("login", controllers.Login)          //登录
+		base.POST("login", controllers.LoginFront)     //前台登录
 		base.POST("joinup", controllers.JoinUp)        //注册
 		base.GET("booklist", controllers.GetBookList)  //图书信息列表
 		base.GET("searchlist", controllers.SearchBook) //搜索图书
@@ -57,6 +57,7 @@ func InitRouter() *gin.Engine {
 	{
 		admin.GET("userlist", controllers.GetUser) //用户列表
 
+		admin.POST("login", controllers.Login)                 //后台登陆
 		admin.POST("addbook", controllers.AddBook)             //增加图书
 		admin.DELETE("deletebook/:id", controllers.DeleteBook) //删除图书
 		admin.PUT("editbook/:id", controllers.EditBook)        //编辑图书信息

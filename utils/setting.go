@@ -11,12 +11,12 @@ var (
 	HttpPort string
 	JwtKey   string
 
-	Db         string
-	DbHost     string
-	DbPort     string
-	DbUser     string
-	DbPassword string
-	DbName     string
+	DB         string
+	DBHost     string
+	DBPort     string
+	DBUser     string
+	DBPassword string
+	DBName     string
 )
 
 func init() {
@@ -34,10 +34,10 @@ func LoadServer(file *ini.File) {
 }
 
 func LoadData(file *ini.File) {
-	Db = file.Section("database").Key("Db").MustString("mysql")
-	DbHost = file.Section("database").Key("DbHost").MustString("127.0.0.1")
-	DbPort = file.Section("database").Key("DbPort").MustString("3306")
-	DbUser = file.Section("database").Key("DbUser").MustString("root")
-	DbPassword = file.Section("database").Key("DbPassword").MustString("0511")
-	DbName = file.Section("database").Key("DbName").MustString("bookdbms")
+	DB = file.Section("database").Key("DB").MustString("mysql")
+	DBHost = file.Section("database").Key("DBHost").MustString("127.0.0.1")
+	DBPort = file.Section("database").Key("DBPort").MustString("3306")
+	DBUser = file.Section("database").Key("DBUser").MustString("root")
+	DBPassword = file.Section("database").Key("DBPassword").MustString("0511")
+	DBName = file.Section("database").Key("DBName").MustString("bookdbms")
 }

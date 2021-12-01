@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GoBIMS/model"
+	"GoBIMS/utils"
 	"GoBIMS/utils/errmsg"
 	"net/http"
 	"strconv"
@@ -26,12 +27,11 @@ func GetBookList(c *gin.Context) {
 	}
 
 	data, code, total := model.CheckBookPage(pageSize, pageNum)
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"total":   total,
-		"message": errmsg.GetErrMsg(code),
-	})
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, total, data)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
 
 // GetBookList 查询图书列表
@@ -53,12 +53,11 @@ func SearchBook(c *gin.Context) {
 	}
 
 	data, code, total := model.SearchBookInfo(name, categories, pageSize, pageNum)
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"total":   total,
-		"message": errmsg.GetErrMsg(code),
-	})
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, total, data)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
 
 // AddBook 添加图书
@@ -68,11 +67,11 @@ func AddBook(c *gin.Context) {
 
 	code := model.CreateBookInfo(&data)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"message": errmsg.GetErrMsg(code),
-	})
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, -1, data)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
 
 // EditBook 编辑图书信息
@@ -83,10 +82,11 @@ func EditBook(c *gin.Context) {
 
 	code := model.EditBookInfo(id, &data)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"message": errmsg.GetErrMsg(code),
-	})
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, -1)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
 
 // DeleteBook 删除文章
@@ -95,8 +95,9 @@ func DeleteBook(c *gin.Context) {
 
 	code := model.DeleteBookInfo(id)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"message": errmsg.GetErrMsg(code),
-	})
+	if code == errmsg.SUCCESS {
+		utils.ReturnJSON(c, http.StatusOK, code, -1)
+	} else {
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+	}
 }
