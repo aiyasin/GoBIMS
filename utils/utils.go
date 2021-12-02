@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ReturnJSON(c *gin.Context, httpStatus int, code int, num int64, data ...interface{}) {
+func ReturnJSON(c *gin.Context, httpStatus int, code int, num int64, data interface{}) {
 	c.JSON(httpStatus, gin.H{
 		"status":   code,
 		"message":  errmsg.GetErrMsg(code),

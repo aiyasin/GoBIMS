@@ -31,7 +31,7 @@ func CheckBookPage(pageSize int, pageNum int) ([]Book, int, int64) {
 	var booklist []Book
 	var err error
 	var total int64
-	err = db.Select("id, name, categories, author, price, date").
+	err = db.Select("id, name, categories, author, price, date, created_at, updated_at, deleted_at").
 		Limit(pageSize).
 		Offset((pageNum - 1) * pageSize).
 		Order("id").
@@ -50,7 +50,7 @@ func SearchBookInfo(name string, categories string, pageSize int, pageNum int) (
 	var booklist []Book
 	var err error
 	var total int64
-	err = db.Select("id, name, categories, author, price, date").
+	err = db.Select("id, name, categories, author, price, date, created_at, updated_at, deleted_at").
 		Limit(pageSize).
 		Offset((pageNum-1)*pageSize).
 		Order("id").
@@ -65,7 +65,7 @@ func SearchBookInfo(name string, categories string, pageSize int, pageNum int) (
 	return booklist, errmsg.SUCCESS, total
 }
 
-// EditBookInfo 编辑文章
+// EditBookInfo 编辑图书
 func EditBookInfo(id int, data *Book) int {
 	var art Book
 	var maps = make(map[string]interface{})

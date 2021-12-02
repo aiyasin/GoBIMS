@@ -15,5 +15,6 @@
 # vendor/
 #
 #
-.idea/
-.web/
+.idea/*
+web/*
+log/*

@@ -21,7 +21,7 @@ func CheckLogin(username string, password string) (User, int) {
 	var user User
 	var PasswordErr error
 
-	db.Where("username = ?", username).First(&user)
+	db.Where("user_name = ?", username).First(&user)
 
 	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(password))
 
@@ -42,7 +42,7 @@ func CheckLoginFront(username string, password string) (User, int) {
 	var user User
 	var PasswordErr error
 
-	db.Where("username = ?", username).First(&user)
+	db.Where("user_name = ?", username).First(&user)
 
 	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(password))
 	if user.ID == 0 {
@@ -83,17 +83,18 @@ func CheckUserPage(username string, pageSize int, pageNum int) ([]User, int, int
 	var user []User
 	var total int64
 	if username != "" {
-		db.Select("id,user_name,role,created_at").
-			Where("user_name LIKE ?", username+"%").
+		// fmt.Println("ffff")
+		db.Select("id, created_at, updated_at, deleted_at, user_name, pass_word, role").
+			Where("user_name LIKE ?", "%"+username+"%").
 			Limit(pageSize).
 			Offset((pageNum - 1) * pageSize).
 			Find(&user)
 		db.Model(&user).Where(
-			"user_name LIKE ?", username+"%",
+			"user_name LIKE ?", "%"+username+"%",
 		).Count(&total)
 		return user, errmsg.SUCCESS, total
 	}
-	db.Select("id,user_name,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
+	db.Select("id, created_at, updated_at, deleted_at, user_name, pass_word, role").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&user)
 	db.Model(&user).Count(&total)
 
 	if err != nil {
@@ -128,7 +129,7 @@ func ScryptPassWord(password string) string {
 func EditUser(id int, data *User) int {
 	var user User
 	var maps = make(map[string]interface{})
-	maps["username"] = data.UserName
+	maps["user_name"] = data.UserName
 	maps["role"] = data.Role
 	err = db.Model(&user).Where("id = ? ", id).Updates(maps).Error
 	if err != nil {

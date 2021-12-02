@@ -30,7 +30,7 @@ func GetBookList(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, total, data)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -56,7 +56,7 @@ func SearchBook(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, total, data)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -70,7 +70,7 @@ func AddBook(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, -1, data)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -83,9 +83,9 @@ func EditBook(c *gin.Context) {
 	code := model.EditBookInfo(id, &data)
 
 	if code == errmsg.SUCCESS {
-		utils.ReturnJSON(c, http.StatusOK, code, -1)
+		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -96,8 +96,8 @@ func DeleteBook(c *gin.Context) {
 	code := model.DeleteBookInfo(id)
 
 	if code == errmsg.SUCCESS {
-		utils.ReturnJSON(c, http.StatusOK, code, -1)
+		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }

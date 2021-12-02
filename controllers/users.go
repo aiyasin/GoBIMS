@@ -16,12 +16,13 @@ func JoinUp(c *gin.Context) {
 	var user model.User
 	var code int
 	_ = c.ShouldBindJSON(&user)
+
 	code = model.CheckUser(user)
 	if code == errmsg.SUCCESS {
 		model.CreatUser(&user)
 		utils.ReturnJSON(c, http.StatusOK, code, -1, user)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -29,7 +30,7 @@ func JoinUp(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	pageSize := cast.ToInt(c.Query("pagesize"))
 	pageNum := cast.ToInt(c.Query("pagenum"))
-	username := c.Query("user_name")
+	username := c.Query("username")
 	switch {
 	case pageSize >= 100:
 		pageSize = 100
@@ -44,7 +45,7 @@ func GetUser(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, total, data)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -57,9 +58,9 @@ func EditUser(c *gin.Context) {
 	code := model.CheckUpUser(id, data.UserName)
 	if code == errmsg.SUCCESS {
 		model.EditUser(id, &data)
-		utils.ReturnJSON(c, http.StatusOK, code, -1)
+		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }
 
@@ -68,8 +69,8 @@ func DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	code := model.DeleteUser(id)
 	if code == errmsg.SUCCESS {
-		utils.ReturnJSON(c, http.StatusOK, code, -1)
+		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
-		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1)
+		utils.ReturnJSON(c, http.StatusUnprocessableEntity, code, -1, nil)
 	}
 }

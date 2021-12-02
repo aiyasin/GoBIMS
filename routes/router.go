@@ -2,6 +2,7 @@ package routes
 
 import (
 	"GoBIMS/controllers"
+	"GoBIMS/middleware"
 	"GoBIMS/utils"
 
 	"github.com/gin-contrib/multitemplate"
@@ -35,6 +36,7 @@ func InitRouter() *gin.Engine {
 	// 	c.HTML(200, "admin", nil)
 	// })
 	r := gin.Default()
+	r.Use(middleware.Cors())
 	// 基础模块路由接口
 	base := r.Group("api/v1/base")
 	{
@@ -42,7 +44,6 @@ func InitRouter() *gin.Engine {
 		base.POST("joinup", controllers.JoinUp)        //注册
 		base.GET("booklist", controllers.GetBookList)  //图书信息列表
 		base.GET("searchlist", controllers.SearchBook) //搜索图书
-
 	}
 	// 用户模块路由接口
 	user := r.Group("api/v1/user")
@@ -55,13 +56,14 @@ func InitRouter() *gin.Engine {
 	// 管理员模块路由接口
 	admin := r.Group("api/v1/admin")
 	{
-		admin.GET("userlist", controllers.GetUser) //用户列表
+
+		admin.GET("userlist", controllers.GetUser) //用户列表or使用username搜索
+		admin.GET("searchuser", controllers.GetUser)
 
 		admin.POST("login", controllers.Login)                 //后台登陆
 		admin.POST("addbook", controllers.AddBook)             //增加图书
 		admin.DELETE("deletebook/:id", controllers.DeleteBook) //删除图书
 		admin.PUT("editbook/:id", controllers.EditBook)        //编辑图书信息
 	}
-
 	return r
 }
