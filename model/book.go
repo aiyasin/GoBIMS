@@ -3,18 +3,17 @@ package model
 import (
 	"GoBIMS/utils/errmsg"
 	"fmt"
-	"time"
 
 	"gorm.io/gorm"
 )
 
 type Book struct {
 	gorm.Model
-	Name       string    `gorm:"type:varchar(50);not null;columns:name" json:"name"`
-	Categories string    `gorm:"type:varchar(50);not null;columns:categories" json:"categories"`
-	Author     string    `gorm:"type:varchar(50);not null;columns:author" json:"author"`
-	Price      float32   `gorm:"type:float;not null;columns:price" json:"price"`
-	Date       time.Time `gorm:"type:date;not null;columns:date" json:"date"`
+	Name       string  `gorm:"type:varchar(50);not null;columns:name" json:"name"`
+	Categories string  `gorm:"type:varchar(50);not null;columns:categories" json:"categories"`
+	Author     string  `gorm:"type:varchar(50);not null;columns:author" json:"author"`
+	Price      float32 `gorm:"type:float;not null;columns:price" json:"price"`
+	Date       string  `gorm:"type:varchar(50);not null;columns:date" json:"date"`
 }
 
 // CreateBookInfo 新增图书信息
@@ -26,23 +25,23 @@ func CreateBookInfo(data *Book) int {
 	return errmsg.SUCCESS
 }
 
-// GetBookInfo 查询图书列表
+// CheckBookPage 查询图书列表
 func CheckBookPage(pageSize int, pageNum int) ([]Book, int, int64) {
-	var booklist []Book
+	var bookList []Book
 	var err error
 	var total int64
 	err = db.Select("id, name, categories, author, price, date, created_at, updated_at, deleted_at").
 		Limit(pageSize).
 		Offset((pageNum - 1) * pageSize).
 		Order("id").
-		Find(&booklist).Error
+		Find(&bookList).Error
 	// 单独计数
-	db.Model(&booklist).Count(&total)
+	db.Model(&bookList).Count(&total)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, errmsg.ERROR, 0
 	}
-	return booklist, errmsg.SUCCESS, total
+	return bookList, errmsg.SUCCESS, total
 }
 
 // SearchBookInfo 搜索图书

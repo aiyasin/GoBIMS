@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-	file, err := ini.Load("config/config.ini")
+	file, err := ini.Load("./config/config.ini")
 	if err != nil {
 		fmt.Println("Config Error", err)
 	}
