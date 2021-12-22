@@ -9,5 +9,8 @@ import (
 func main() {
 	model.InitDB()
 	router := routes.InitRouter()
-	router.Run(utils.HttpPort)
+	err := router.Run(utils.HttpPort)
+	if err != nil {
+		return
+	}
 }

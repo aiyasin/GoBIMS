@@ -1,4 +1,4 @@
-time="2021-12-01T13:03:48+08:00" level=info Agent=PostmanRuntime/7.28.4 DataSize=1999 HostName=Moon Ip="::1" Method=GET Path=/api/v1/admin/userlist SpendTime="26 ms" status=200
-time="2021-12-01T13:04:03+08:00" level=info Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34" DataSize=1999 HostName=Moon Ip="::1" Method=GET Path=/api/v1/admin/userlist SpendTime="2 ms" status=200
+time="2021-12-06T23:48:12+08:00" level=info Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.43" DataSize=58 HostName=Moon Ip="::1" Method=POST Path=/api/v1/base/login SpendTime="0 ms" status=200
+37.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34" DataSize=1999 HostName=Moon Ip="::1" Method=GET Path=/api/v1/admin/userlist SpendTime="2 ms" status=200
 ze=0 HostName=Moon Ip="::1" Method=GET Path=/js/vue.js SpendTime="0 ms" status=404
 time="2021-11-27T23:32:02+08:00" level=warning Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34" DataSize=0 HostName=Moon Ip="::1" Method=POST Path=/login SpendTime="0 ms" status=404

@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 获取图书列表
+// GetBookList 获取图书列表
 func GetBookList(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
@@ -21,11 +21,9 @@ func GetBookList(c *gin.Context) {
 	case pageSize <= 0:
 		pageSize = 10
 	}
-
 	if pageNum == 0 {
 		pageNum = 1
 	}
-
 	data, code, total := model.CheckBookPage(pageSize, pageNum)
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, total, data)
@@ -34,7 +32,7 @@ func GetBookList(c *gin.Context) {
 	}
 }
 
-// GetBookList 查询图书列表
+// SearchBook 查询图书列表
 func SearchBook(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
@@ -47,7 +45,6 @@ func SearchBook(c *gin.Context) {
 	case pageSize <= 0:
 		pageSize = 10
 	}
-
 	if pageNum == 0 {
 		pageNum = 1
 	}
@@ -64,9 +61,7 @@ func SearchBook(c *gin.Context) {
 func AddBook(c *gin.Context) {
 	var data model.Book
 	_ = c.ShouldBindJSON(&data)
-
 	code := model.CreateBookInfo(&data)
-
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, -1, data)
 	} else {
@@ -79,9 +74,7 @@ func EditBook(c *gin.Context) {
 	var data model.Book
 	id, _ := strconv.Atoi(c.Param("id"))
 	_ = c.ShouldBindJSON(&data)
-
 	code := model.EditBookInfo(id, &data)
-
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
@@ -89,12 +82,10 @@ func EditBook(c *gin.Context) {
 	}
 }
 
-// DeleteBook 删除文章
+// DeleteBook 删除图书
 func DeleteBook(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-
 	code := model.DeleteBookInfo(id)
-
 	if code == errmsg.SUCCESS {
 		utils.ReturnJSON(c, http.StatusOK, code, -1, nil)
 	} else {
